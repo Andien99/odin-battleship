@@ -20,4 +20,4 @@ class ship {
 
 let jetski = new ship(4, 0, false);
 
-export { ship };
+module.exports = { ship };

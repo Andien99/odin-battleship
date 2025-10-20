@@ -1,5 +1,3 @@
-import { ship } from "./createShip";
-
 class gameboard {
   constructor(grid, missedAttacks, ships, sunkedShips) {
     this.grid = grid;
@@ -31,6 +29,14 @@ class gameboard {
     }
   }
 
+  find(coordinate) {
+    let rowLocation = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    let index;
+    index = coordinate[0] - 1;
+
+    return this.grid[index][rowLocation.indexOf(coordinate[1])];
+  }
+
   recieveAttack(coordinate) {}
 
   missedAttacks() {
@@ -47,4 +53,4 @@ class node {
   }
 }
 
-export { gameboard };
+module.exports = { gameboard };

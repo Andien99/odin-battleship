@@ -1,4 +1,4 @@
-const { ship } = require("./createShip");
+import { ship } from "./createShip";
 
 test("ship class can create a ship of specific parameters", () => {
   const test = new ship(4, 0, false);
