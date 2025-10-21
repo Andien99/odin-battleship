@@ -22,3 +22,13 @@ test("ship will sink if hitcount exceeds length", () => {
   test.isSunk();
   expect(test.sunk).toBe(true);
 });
+
+test("ship orientation will be horizontal by default", () => {
+  const test = new ship(2, 0, false, "horizontal");
+  expect(test.orientation).toBe("horizontal");
+});
+
+test("ship orientation can be oriented vertically", () => {
+  const test = new ship(2, 2, false, "vertical");
+  expect(test.orientation).toBe("vertical");
+});

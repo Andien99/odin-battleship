@@ -2,8 +2,11 @@
 //horizontally it is coded in alphabetical order
 
 class ship {
-  constructor(length, hitcount, sunk) {
-    (this.length = length), (this.hitcount = hitcount), (this.sunk = sunk);
+  constructor(length, hitcount, sunk, orientation = "horizontal") {
+    (this.length = length),
+      (this.hitcount = hitcount),
+      (this.sunk = sunk),
+      (this.orientation = orientation);
   }
 
   hit() {
@@ -17,7 +20,5 @@ class ship {
     }
   }
 }
-
-let jetski = new ship(4, 0, false);
 
 module.exports = { ship };
