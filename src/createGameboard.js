@@ -64,6 +64,12 @@ class gameboard {
         currentCoordinate[1] = rowLocation[index + 1];
         index += 1;
       }
+    } else if (ship.orientation == "vertical") {
+      for (let i = 0; i < ship.length; i++) {
+        let currentNode = this.find(currentCoordinate);
+        currentNode.ship = ship;
+        currentCoordinate[0] = currentCoordinate[0] + 1;
+      }
     }
   }
 

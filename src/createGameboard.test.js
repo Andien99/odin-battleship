@@ -33,6 +33,14 @@ test("Error is thrown if ship placement is out of bounds", () => {
   );
 });
 
+test("players can place vertical ships at specific coordinates", () => {
+  const testShip = new ship(3, 0, false, "vertical");
+  board.placeShip(testShip, [5, "A"]);
+  expect(board.grid[4][0].ship).toStrictEqual(testShip);
+  expect(board.grid[5][0].ship).toStrictEqual(testShip);
+  expect(board.grid[6][0].ship).toStrictEqual(testShip);
+});
+
 test("coordinates on the grid can recieve an attack if coordinate contains a ship", () => {
   const testShip = new ship(3, 0, false, "horizontal");
   board.placeShip(testShip, [2, "C"]);
