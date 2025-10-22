@@ -1,9 +1,8 @@
 const { ship } = require("./createShip");
 const { gameboard } = require("./createGameboard");
-const newShip = new ship(3, 0, false, "horizontal");
-const newgameboard = new gameboard(0, 0, 0, 0);
-newgameboard.createGameboard();
-const thisCoordinate = newgameboard.find([3, "A"]);
-console.log(thisCoordinate.coordinate);
-
-newgameboard.placeShip(newShip, [2, "C"]);
+const board = new gameboard();
+board.createGameboard();
+const testShip1 = new ship(3, 0, false, "vertical");
+const testShip2 = new ship(2, 0, false, "horizontal");
+board.recieveAttack([1, "A"]);
+board.placeShip(testShip1, [7, "E"]);

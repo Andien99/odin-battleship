@@ -42,10 +42,26 @@ test("players can place vertical ships at specific coordinates", () => {
 });
 
 test("coordinates on the grid can recieve an attack if coordinate contains a ship", () => {
+  const board = new gameboard();
+  board.createGameboard();
   const testShip = new ship(3, 0, false, "horizontal");
   board.placeShip(testShip, [2, "C"]);
   board.recieveAttack([2, "C"]);
   expect(testShip.hitcount).toBe(1);
+});
+
+test("individual ships have a seperate hitcount", () => {
+  const board = new gameboard();
+  board.createGameboard();
+  const testShip1 = new ship(3, 0, false, "vertical");
+  const testShip2 = new ship(5, 0, false, "horizontal");
+  board.placeShip(testShip1, [1, "A"]);
+  board.placeShip(testShip2, [3, "C"]);
+  board.recieveAttack([3, "C"]);
+  board.recieveAttack([3, "D"]);
+  board.recieveAttack([1, "A"]);
+  expect(testShip1.hitcount).toBe(1);
+  expect(testShip2.hitcount).toBe(2);
 });
 
 test("Error is thrown if coordinate has already been hit once", () => {
@@ -53,6 +69,13 @@ test("Error is thrown if coordinate has already been hit once", () => {
   expect(() => board.recieveAttack([2, "D"])).toThrow(
     "This coordinate has already been selected"
   );
+});
+
+test("Error is thrown if placement already contains ship", () => {
+  const testShip1 = new ship(3, 0, false, "vertical");
+  const testShip2 = new ship(2, 0, false, "horizontal");
+  board.placeShip(testShip1, [7, "E"]);
+  expect(() => board.placeShip(testShip2, [7, "E"])).toThrow();
 });
 
 test("Hitting multiple parts of the ship from grid increase its hitcount", () => {
@@ -66,8 +89,23 @@ test("Hitting multiple parts of the ship from grid increase its hitcount", () =>
   expect(testShip2.hitcount).toBe(3);
 });
 
-test("gameboard can keep track of missed attacks", () => {});
+test("gameboard can keep track of missed attacks", () => {
+  const board = new gameboard();
+  board.createGameboard();
+  expect(board.missedAttacks).toBe(0);
+  board.recieveAttack([4, "D"]);
+  expect(board.missedAttacks).toBe(1);
+});
 
-test("gameboard can report if a ship has sunk", () => {});
+test("gameboard can report if a ship has sunk", () => {
+  const board = new gameboard();
+  board.createGameboard();
+  const testShip2 = new ship(3, 0, false, "horizontal");
+  board.placeShip(testShip2, [3, "C"]);
+  board.recieveAttack([3, "C"]);
+  board.recieveAttack([3, "D"]);
+  expect(board.recieveAttack([3, "E"])).toBe("A ship has sunk!");
+  expect(board.sunkedShips).toBe(1);
+});
 
 test(`gameboard can tell if all of a player's ship has sunk`, () => {});

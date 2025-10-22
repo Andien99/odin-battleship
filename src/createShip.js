@@ -16,7 +16,9 @@ class ship {
   isSunk() {
     if (this.hitcount >= this.length) {
       this.sunk = true;
-      return "This ship has sunk";
+      return true;
+    } else {
+      return false;
     }
   }
 }
