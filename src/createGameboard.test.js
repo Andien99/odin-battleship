@@ -101,11 +101,25 @@ test("gameboard can report if a ship has sunk", () => {
   const board = new gameboard();
   board.createGameboard();
   const testShip2 = new ship(3, 0, false, "horizontal");
+  const testShip1 = new ship(3, 0, false, "vertical");
   board.placeShip(testShip2, [3, "C"]);
+  board.placeShip(testShip2, [5, "F"]);
   board.recieveAttack([3, "C"]);
   board.recieveAttack([3, "D"]);
   expect(board.recieveAttack([3, "E"])).toBe("A ship has sunk!");
   expect(board.sunkedShips).toBe(1);
 });
 
-test(`gameboard can tell if all of a player's ship has sunk`, () => {});
+test(`gameboard can tell if all of a player's ship has sunk`, () => {
+  const board = new gameboard();
+  board.createGameboard();
+  const testShip1 = new ship(1, 0, false, "horizontal");
+  const testShip2 = new ship(1, 0, false, "horizontal");
+  const testShip3 = new ship(1, 0, false, "horizontal");
+  board.placeShip(testShip1, [3, "C"]);
+  board.placeShip(testShip2, [4, "E"]);
+  board.placeShip(testShip3, [3, "D"]);
+  board.recieveAttack([3, "C"]);
+  board.recieveAttack([3, "D"]);
+  expect(board.recieveAttack([4, "E"])).toBe("All ships have sunk! You win!");
+});

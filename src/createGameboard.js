@@ -121,7 +121,11 @@ class gameboard {
       currentNode.ship.hitcount += 1;
       if (currentNode.ship.isSunk() == true) {
         self.sunkedShips += 1;
-        return "A ship has sunk!";
+        if (self.checkWinner() == true) {
+          return "All ships have sunk! You win!";
+        } else {
+          return "A ship has sunk!";
+        }
       }
       return "A ship has been hit!";
     } else {
@@ -133,6 +137,12 @@ class gameboard {
   addMissedAttacks() {
     this.missedAttacks += 1;
     return;
+  }
+
+  checkWinner() {
+    if (this.ships.length == this.sunkedShips) {
+      return true;
+    }
   }
 }
 
