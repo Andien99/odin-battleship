@@ -107,25 +107,48 @@ header {
 }
 
 .gameboard {
+  padding: 0px;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
   justify-items: center;
   align-items: center;
+  height: fit-content;
+}
+
+.axis {
+  padding: 0px;
+  display: grid;
+  text-align: center;
+  font-size: 32px;
+  align-items: flex-end;
+}
+
+.x {
+  grid-template-columns: repeat(10, 1fr);
+}
+.y {
+  grid-template-rows: repeat(10, 1fr);
 }
 
 button:hover {
   background-color: #efefef;
 }
 
+#player-1-container {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 56px 1fr;
+}
+
 #player-1 {
   background-color: aqua;
   border: 2px black solid;
-  border-radius: 4px;
 }
 .coordinateBtn {
   background-color: white;
-  height: 1.2em;
-  width: 1.2em;
+  height: 1em;
+  width: 1em;
+  padding: 0px;
   border-radius: 1px;
 }

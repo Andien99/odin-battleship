@@ -1,9 +1,9 @@
 import { gameboard } from "./createGameboard";
 
 class player {
-  constructor(CPU = false) {
-    this.CPU = CPU;
-    this.gameboard = new gameboard();
+  constructor(playerType = "player1") {
+    this.playerType = playerType;
+    this.gameboard = new gameboard(this.playerType);
   }
 }
 
