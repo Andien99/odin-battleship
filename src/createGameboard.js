@@ -1,9 +1,12 @@
+const { createCoordinateBtn } = require("./createGridButton");
+
 class gameboard {
   constructor() {
     this.grid = [];
     this.missedAttacks = 0;
     this.ships = [];
     this.sunkedShips = null;
+    this.createGameboard();
   }
 
   createGameboard() {
@@ -23,7 +26,10 @@ class gameboard {
         finalSet = [];
         currentRow += 1;
       }
-      finalSet.push(new node([currentRow, rowLocation[i]], false, null));
+      if (currentRow < 11) {
+        createCoordinateBtn(currentRow + rowLocation[i]);
+        finalSet.push(new node([currentRow, rowLocation[i]], false, null));
+      }
       i++;
       createGrid();
     }

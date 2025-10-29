@@ -4,11 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Odin Battleship</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header>
-      <title>Battleship</title>
-    </header>
-    <body></body>
+    <div class="heading">
+      <header>Battleship</header>
+      <div class="info-bar">
+        <div class="player1">Player 1</div>
+        <div class="score-board">Scoreboard</div>
+        <div class="player2">Player 2</div>
+      </div>
+    </div>
+    <div id="main-content">
+      <div id="player-1" class="gameboard"></div>
+      <div class="remaining-ships"></div>
+      <div class="gameboard player-2"></div>
+    </div>
   </body>
 </html>

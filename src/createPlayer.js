@@ -6,3 +6,5 @@ class player {
     this.gameboard = new gameboard();
   }
 }
+
+export { player };

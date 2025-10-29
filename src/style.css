@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 6fr;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Custom Styles */
+
+header {
+  font-size: 5rem;
+  font-weight: bold;
+  align-self: center;
+}
+
+.heading {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+  justify-items: center;
+}
+
+.info-bar {
+  display: grid;
+  width: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.info-bar > div {
+  text-align: center;
+  font-size: 2rem;
+}
+
+#main-content {
+  padding: 1em;
+  font-size: 3rem;
+  background-color: #92bcea;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: 5fr 1fr 5fr;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  justify-items: center;
+  align-items: center;
+}
+
+button:hover {
+  background-color: #efefef;
+}
+
+#player-1 {
+  background-color: aqua;
+  border: 2px black solid;
+  border-radius: 4px;
+}
+.coordinateBtn {
+  background-color: white;
+  height: 1.2em;
+  width: 1.2em;
+  border-radius: 1px;
+}
