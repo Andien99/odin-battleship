@@ -103,7 +103,7 @@ header {
   display: grid;
   justify-items: center;
   align-items: center;
-  grid-template-columns: 5fr 1fr 5fr;
+  grid-template-columns: 5fr 3fr 5fr;
 }
 
 .gameboard {
@@ -114,6 +114,13 @@ header {
   justify-items: center;
   align-items: center;
   height: fit-content;
+  border: 3px solid black;
+}
+
+.gameboard-container {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 56px 1fr;
 }
 
 .axis {
@@ -135,20 +142,56 @@ button:hover {
   background-color: #efefef;
 }
 
-#player-1-container {
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  grid-template-rows: 56px 1fr;
-}
-
 #player-1 {
   background-color: aqua;
   border: 2px black solid;
 }
 .coordinateBtn {
   background-color: white;
-  height: 1em;
-  width: 1em;
+  height: 1.2em;
+  width: 1.2em;
   padding: 0px;
   border-radius: 1px;
+}
+
+/* Scoreboard styling */
+.scoreboard-content {
+  background-color: white;
+  height: 13em;
+  width: 3em;
+  border-radius: 15px;
+  border: solid black 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scoreboard-title {
+  text-align: center;
+  font-size: 0.8em;
+  line-height: 1.2em;
+  padding-top: 0.4em;
+}
+
+.ship-container {
+  border: solid 2px black;
+  width: 2em;
+  height: 2em;
+  border-radius: 8px;
+  margin: 0.3em;
+}
+
+#middle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.movement-log {
+  width: 6.2em;
+  height: 4em;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 12px;
 }

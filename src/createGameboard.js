@@ -1,61 +1,20 @@
-const { createCoordinateBtn } = require("./createGridButton");
-
 class gameboard {
   constructor(playerType) {
     this.grid = [];
     this.missedAttacks = 0;
     this.ships = [];
     this.sunkedShips = null;
-    this.createGameboard(playerType);
+    this.createGameboard();
   }
 
-  createGameboard(playerType) {
+  createGameboard() {
     let self = this;
     let currentRow = 1;
     let rowLocation = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
     let finalSet = [];
     let i = 0;
-    const mainContainer = document.getElementById("main-content");
-    let currentContainer = document.createElement("div");
-    mainContainer.appendChild(currentContainer);
-    let bufferDiv = document.createElement("div");
-    let labelXaxis = document.createElement("div");
-    labelXaxis.classList.add("x");
-    let labelYaxis = document.createElement("div");
-    labelYaxis.classList.add("y");
-    let playerGameboard = document.createElement("div");
-    if (playerType == "player") {
-      currentContainer.setAttribute("id", "player-1-container");
-      labelXaxis.setAttribute("id", "x-axis-player1");
-      labelXaxis.classList.add("axis");
-      labelYaxis.setAttribute("id", "y-axis-player1");
-      labelYaxis.classList.add("axis");
-      playerGameboard.classList.add("gameboard");
-      currentContainer.appendChild(bufferDiv);
-      currentContainer.appendChild(createLabel(labelXaxis));
-      currentContainer.appendChild(createLabel(labelYaxis));
-      currentContainer.appendChild(playerGameboard);
-      createGrid();
-    } else if (playerType == "player2") {
-      currentContainer.setAttribute("id", "player-2-container");
-      mainContainer.appendChild(currentContainer);
-    } else {
-      currentContainer.setAttribute("id", "cpu-container");
-      mainContainer.appendChild(currentContainer);
-    }
 
-    function createLabel(axis) {
-      for (let j = 0; j < 10; j++) {
-        let label = document.createElement("div");
-        if (axis.classList.contains("x")) {
-          label.textContent = rowLocation[j];
-        } else {
-          label.textContent = j + 1;
-        }
-        axis.appendChild(label);
-      }
-      return axis;
-    }
+    createGrid();
     function createGrid() {
       if (self.grid.length >= 10) {
         return self.grid;
@@ -67,7 +26,6 @@ class gameboard {
         currentRow += 1;
       }
       if (currentRow < 11) {
-        createCoordinateBtn(playerGameboard, currentRow + rowLocation[i]);
         finalSet.push(new node([currentRow, rowLocation[i]], false, null));
       }
       i++;
