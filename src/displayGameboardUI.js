@@ -1,10 +1,11 @@
 import { createCoordinateBtn } from "./createGridButton";
-
+import { gameboard } from "./createGameboard";
 class gameboardUI {
   constructor(playerType) {
     this.display = null;
     this.playerType = playerType;
     this.render();
+    this.gameboard = new gameboard(playerType);
   }
 
   render() {
@@ -78,7 +79,27 @@ class gameboardUI {
     const gameboard = document.querySelector("#" + test);
     gameboard.addEventListener("click", (test) => {
       console.log(test.target.id);
+      this.handleAttack(test.target.id, test.target);
     });
+  }
+
+  handleAttack(coordinate, gridBtn) {
+    let coordinateArr = [coordinate.charAt(0), coordinate.charAt(1)];
+    let attackResult = this.gameboard.recieveAttack(coordinateArr);
+    this.updateGameboard(attackResult, gridBtn);
+  }
+
+  updateGameboard(result, gridBtn) {
+    if (result === "No ships were hit!") {
+      gridBtn.textContent = "⚪";
+      gridBtn.style.color = "initial";
+      gridBtn.disabled = true;
+    } else {
+      gridBtn.textContent = "🔴";
+      gridBtn.disabled = true;
+      gridBtn.style.color = "initial";
+      gridBtn.style.backgroundColor = "#ee9090ff";
+    }
   }
 }
 

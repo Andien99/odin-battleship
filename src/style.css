@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 *,
 *::before,
 *::after {
@@ -152,6 +154,9 @@ button:hover {
   width: 1.2em;
   padding: 0px;
   border-radius: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Scoreboard styling */
@@ -194,4 +199,49 @@ button:hover {
   background-color: white;
   border: 3px solid black;
   border-radius: 12px;
+}
+
+/* Modal stylings */
+
+.open {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Press Start 2P", system-ui;
+}
+
+.closed {
+  opacity: 0;
+  position: fixed;
+  top: -1000px;
+}
+
+#gamemode {
+  width: 450px;
+  height: 240px;
+  border-radius: 10px;
+  background-color: white;
+  border: solid 1px #524848;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  align-items: center;
+  gap: 13px;
+}
+
+#gamemode > button {
+  border-radius: 10px;
+  padding: 3px 15px;
+  font-size: 1.3em;
+  width: 400px;
+}
+
+.modal-title {
+  font-size: 44px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.versus-player {
 }
