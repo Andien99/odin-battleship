@@ -1,4 +1,6 @@
 import { player } from "./createPlayer";
+import { scoreboard } from "./createScoreboard";
+import { selectShip } from "./selectShip";
 
 export { gamemodeModal };
 
@@ -31,14 +33,14 @@ class gamemodeModal {
 
   addEventListener(parent, playerBtn, CPUBtn) {
     playerBtn.addEventListener("click", () => {
-      new player("player1");
-      new player("player2");
+      new selectShip();
       parent.classList.replace("open", "closed");
       playerBtn.disabled = true;
       CPUBtn.disabled = true;
     });
     CPUBtn.addEventListener("click", () => {
       new player("player1");
+      new scoreboard();
       new player("CPU");
       parent.classList.replace("open", "closed");
     });

@@ -1,7 +1,7 @@
 import { player } from "./createPlayer";
 import { scoreboard } from "./createScoreboard";
 import { ship } from "./createShip";
-import { gamemodeModal } from "./openGamemodeModal";
+import { gamemodeModal } from "./selectGamemode";
 import "./style.css";
 
 new gamemodeModal();

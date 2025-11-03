@@ -1,9 +1,10 @@
 import { createCoordinateBtn } from "./createGridButton";
 import { gameboard } from "./createGameboard";
 class gameboardUI {
-  constructor(playerType) {
+  constructor(playerType, idContainer) {
     this.display = null;
     this.playerType = playerType;
+    this.idContainer = idContainer;
     this.render();
     this.gameboard = new gameboard(playerType);
   }
@@ -14,7 +15,7 @@ class gameboardUI {
   }
 
   createContainer() {
-    const mainContainer = document.getElementById("main-content");
+    const mainContainer = document.getElementById(this.idContainer);
     let currentContainer = document.createElement("div");
     let bufferDiv = document.createElement("div");
     let labelXaxis = document.createElement("div");
