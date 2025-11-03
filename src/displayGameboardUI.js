@@ -1,10 +1,11 @@
 import { createCoordinateBtn } from "./createGridButton";
 import { gameboard } from "./createGameboard";
 class gameboardUI {
-  constructor(playerType, idContainer) {
+  constructor(playerType, idContainer, isPlayable = false) {
     this.display = null;
     this.playerType = playerType;
     this.idContainer = idContainer;
+    this.isPlayable = isPlayable;
     this.render();
     this.gameboard = new gameboard(playerType);
   }
@@ -91,6 +92,9 @@ class gameboardUI {
   }
 
   updateGameboard(result, gridBtn) {
+    if (this.isPlayable == false) {
+      return;
+    }
     if (result === "No ships were hit!") {
       gridBtn.textContent = "⚪";
       gridBtn.style.color = "initial";

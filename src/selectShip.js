@@ -1,33 +1,42 @@
+import {
+  checkChildNodes,
+  updateDisplayLength,
+  updateOrientation,
+  resetChildren,
+  updateColor,
+} from "./customiseShipDisplay";
 import { gameboardUI } from "./displayGameboardUI";
+import { createElement } from "./createElement";
 
 class selectShip {
   constructor() {
+    this.length = 3;
+    this.color = "#ffbe0b";
+    this.orientation = "horizontal";
+    this.selectedShips = [];
     this.initialise();
-  }
-  createElement(tag, property = {}) {
-    return Object.assign(document.createElement(tag), property);
   }
 
   // prettier-ignore
   initialise() {
-    const shipSelectionContainer = this.createElement('div', {id: 'ship-selection-container',className: "modal open",})
-    const selectionGameboard = this.createElement('div', {id:'selection-gameboard'})
-    const rightSideInfo = this.createElement('div', {id:'right-side'})
-    const instructionLabel = this.createElement('h1', {textContent:'Customise ship, then drag and drop!'})
-    const shipSelection = this.createElement("div", { id: "ship-selection"});
-    const displayContainer = this.createElement("div", { id: "display-container",});
-    const displayShip = this.createElement("div", { id: "display-ship" });
-    const startGameBtn = this.createElement("button", {id: "start-game", textContent: "Start Game",});
-    const customiseShipContainer = this.createElement("div", {id: "customise-ship-container",});
-    const orientationContainer = this.createElement("div", {id: "orientation-container",className: "property",});
-    const orientationLabel = this.createElement("p", {textContent: "Orientation",});
-    const orientationBtn = this.createElement("div", {className: "orientation-btn",});
-    const horizontalBtn = this.createElement("button", {textContent: "Horizontal",});
-    const verticalBtn = this.createElement("button", {textContent: "Vertical",});
-    const lengthContainer = this.createElement("div", {id: "length-container",className: "property",});
-    const lengthLabel = this.createElement("p", { textContent: "Length" });
-    const sliderContainer = this.createElement("div", {className: "slider-container",});
-    const sliderInput = this.createElement("input", {
+    const shipSelectionContainer = createElement('div', {id: 'ship-selection-container',className: "modal open",})
+    const selectionGameboard = createElement('div', {id:'selection-gameboard'})
+    const rightSideInfo = createElement('div', {id:'right-side'})
+    const instructionLabel = createElement('h1', {textContent:'Customise ship, then drag and drop!'})
+    const shipSelection = createElement("div", { id: "ship-selection"});
+    const displayContainer = createElement("div", { id: "display-container",});
+    const displayShip = createElement("div", { id: "display-ship" });
+    const startGameBtn = createElement("button", {id: "start-game", textContent: "Start Game",});
+    const customiseShipContainer = createElement("div", {id: "customise-ship-container",});
+    const orientationContainer = createElement("div", {id: "orientation-container",className: "property",});
+    const orientationLabel = createElement("p", {textContent: "Orientation",});
+    const orientationBtn = createElement("div", {className: "orientation-btn",});
+    const horizontalBtn = createElement("button", {textContent: "Horizontal", id:'horizontal-btn'});
+    const verticalBtn = createElement("button", {textContent: "Vertical",id:'vertical-btn'});
+    const lengthContainer = createElement("div", {id: "length-container",className: "property",});
+    const lengthLabel = createElement("p", { textContent: "Length" });
+    const sliderContainer = createElement("div", {className: "slider-container",});
+    const sliderInput = createElement("input", {
       type: "range",
       min: 1,
       max: 5,
@@ -35,15 +44,15 @@ class selectShip {
       id: "myRange",
       className: "slider",
     });
-    const colorContainer = this.createElement('div',{className:'property', id:'color-container'})
-    const colorLabel = this.createElement('p',{textContent: 'Colour'})
-    const paletteContainer = this.createElement('div',{className: 'palette-container'})
-    const paletteRed = this.createElement('div', {className:'palette', id:'red'})
-    const paletteGreen = this.createElement('div', {className:'palette', id:'green'})
-    const paletteYellow = this.createElement('div', {className:'palette', id:'yellow'})
-    const palettePurple = this.createElement('div', {className:'palette', id:'purple'})
-    const paletteBlue = this.createElement('div', {className:'palette', id:'blue'})
-    const randomiseBtn = this.createElement('button',{id:'randomiseBtn', textContent:'Randomise'})
+    const colorContainer = createElement('div',{className:'property', id:'color-container'})
+    const colorLabel = createElement('p',{textContent: 'Colour'})
+    const paletteContainer = createElement('div',{className: 'palette-container'})
+    const paletteRed = createElement('div', {className:'palette', id:'red'})
+    const paletteGreen = createElement('div', {className:'palette', id:'green'})
+    const paletteYellow = createElement('div', {className:'palette', id:'yellow'})
+    const palettePurple = createElement('div', {className:'palette', id:'purple'})
+    const paletteBlue = createElement('div', {className:'palette', id:'blue'})
+    const randomiseBtn = createElement('button',{id:'randomiseBtn', textContent:'Randomise'})
 
     document.body.append(shipSelectionContainer)
     shipSelectionContainer.append(selectionGameboard, rightSideInfo)
@@ -58,7 +67,83 @@ class selectShip {
     colorContainer.append(colorLabel, paletteContainer)
     paletteContainer.append(paletteRed,paletteGreen,paletteYellow,palettePurple,paletteBlue)
     new gameboardUI('player', 'selection-gameboard')
+    this.addEventListener()
+    this.updateShipDisplay(this.length,this.color,this.orientation)
+  }
 
+  updateShipDisplay(length, color, orientation) {
+    const displayShipScreen = document.getElementById("display-ship");
+    checkChildNodes(displayShipScreen);
+    let customShip = document.getElementById("custom-ship");
+    resetChildren(customShip);
+    updateDisplayLength(length, customShip);
+    updateOrientation(orientation, customShip, length);
+    updateColor(color, customShip);
+  }
+
+  addEventListener() {
+    let self = this;
+    let colorArr = ["#ff006e", "#84a59d", "#ffbe0b", "#8338ec", "#3a86ff"];
+    const horizontalBtn = document.getElementById("horizontal-btn");
+    const verticalBtn = document.getElementById("vertical-btn");
+    const sliderInput = document.querySelector(".slider");
+    const paletteRed = document.getElementById("red");
+    const paletteYellow = document.getElementById("yellow");
+    const paletteGreen = document.getElementById("green");
+    const palettePurple = document.getElementById("purple");
+    const paletteBlue = document.getElementById("blue");
+    const randomiseBtn = document.getElementById("randomiseBtn");
+
+    function randomInt1to5() {
+      let randomInt = Math.floor(Math.random() * 10);
+      if (randomInt > 4) {
+        randomInt = randomInt - 5;
+      }
+      return randomInt;
+    }
+
+    horizontalBtn.addEventListener("click", () => {
+      self.orientation = "horizontal";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    verticalBtn.addEventListener("click", () => {
+      self.orientation = "vertical";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    sliderInput.addEventListener("input", () => {
+      self.length = sliderInput.value;
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    paletteRed.addEventListener("click", () => {
+      self.color = "#ff006e";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    paletteGreen.addEventListener("click", () => {
+      self.color = "#84a59d";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    paletteYellow.addEventListener("click", () => {
+      self.color = "#ffbe0b";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    palettePurple.addEventListener("click", () => {
+      self.color = "#8338ec";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    paletteBlue.addEventListener("click", () => {
+      self.color = "#3a86ff";
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+    randomiseBtn.addEventListener("click", () => {
+      self.color = colorArr[randomInt1to5()];
+      self.length = randomInt1to5() + 1;
+      if (Math.floor(Math.random() * 10) > 4) {
+        self.orientation = "horizontal";
+      } else {
+        self.orientation = "vertical";
+      }
+      self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
   }
 }
 

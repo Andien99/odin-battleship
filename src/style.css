@@ -254,7 +254,7 @@ button:hover {
   align-items: center;
   background-color: #f1faee;
   gap: 2em;
-  padding: 2em;
+  padding: 3em 2em;
   border: 4px solid black;
   border-radius: 8px;
 }
@@ -306,7 +306,7 @@ button:hover {
 }
 
 #start-game:hover {
-  background-color: rgb(236, 238, 201);
+  background-color: rgb(226, 224, 224);
   height: 3em;
 }
 
@@ -382,4 +382,23 @@ button:hover {
 
 #yellow {
   background-color: #ffbe0b;
+}
+
+/* Stylings for the custom ship screen */
+
+#display-ship {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ship-square {
+  width: 2em;
+  height: 2em;
+  background-color: red;
+  border: 1px solid black;
+}
+
+#custom-ship {
+  display: grid;
 }
