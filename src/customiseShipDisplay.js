@@ -1,10 +1,14 @@
 import { createElement } from "./createElement";
-function checkChildNodes(parent) {
-  if (parent.hasChildNodes() == false) {
-    let child = createElement("div", { id: "custom-ship" });
+
+function checkChildNodes(parent, child) {
+  if (
+    parent.hasChildNodes() == false ||
+    document.querySelector("#custom.ship") !== null
+  ) {
+    child = createElement("div", { id: "custom-ship" });
     parent.appendChild(child);
   } else {
-    let child = document.getElementById("custom-ship");
+    child = document.getElementById("custom-ship");
   }
 }
 
@@ -39,10 +43,17 @@ function resetChildren(thisNode) {
   resetChildren(thisNode);
 }
 
+function resetDraggedShip() {
+  if (document.querySelector("#draggable-ship") !== null) {
+    document.querySelector("#draggable-ship").remove();
+  }
+}
+
 export {
   checkChildNodes,
   updateDisplayLength,
   updateOrientation,
   resetChildren,
   updateColor,
+  resetDraggedShip,
 };

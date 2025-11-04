@@ -50,67 +50,80 @@ class gameboard {
     return this.grid[colIndex][this.getLetterIndex(coordinate[1])];
   }
 
-  checkOutOfBounds(ship, coordinate, gridlist) {
+  checkOutOfBounds(ship, coordinate) {
     if (
       ship.orientation == "horizontal" &&
       this.getLetterIndex(coordinate[1]) + ship.length - 1 >=
         this.grid[0].length
     ) {
-      throw new Error("This ship placement is out of bounds");
+      console.error("This ship placement is out of bounds");
+      return true;
     } else if (
       ship.orientation == "vertical" &&
       this.grid[coordinate[0] + ship.length - 1] == undefined
     ) {
-      throw new Error("This ship placement is out of bounds");
+      console.error("This ship placement is out of bounds");
+      return true;
     } else {
+      return false;
     }
   }
 
-  checkConflictingShips(coordinateSet) {
-    coordinateSet.forEach((node) => {
-      if (node.ship !== null) {
-        throw new Error("Ship is already here!");
-      }
-    });
-  }
-
-  placeShip(ship, start) {
-    let currentCoordinate = start;
+  getShipGridList(ship, coordinate) {
     let coordinateSet = [];
-    // checks if ship can fit into selected grid
-    try {
-      this.checkOutOfBounds(ship, start);
-    } catch (error) {
-      throw new Error(
-        "This ship placement is out of bounds or a ship is already here!"
-      );
-    }
-    // should be able to determine if the ship is vertical or horizontal
+    let currentCoordinate = [...coordinate];
     if (ship.orientation == "horizontal") {
       for (let i = 0; i < ship.length; i++) {
         let currentNode = this.find(currentCoordinate);
-        // currentNode.ship = ship;
         coordinateSet.push(currentNode);
         currentCoordinate[1] = this.getNextLetter(currentCoordinate[1]);
       }
-      this.checkConflictingShips(coordinateSet);
-      this.ships.push(ship);
-      coordinateSet.forEach((node) => {
-        node.ship = ship;
-      });
     } else if (ship.orientation == "vertical") {
       for (let i = 0; i < ship.length; i++) {
         let currentNode = this.find(currentCoordinate);
-        // currentNode.ship = ship;
         coordinateSet.push(currentNode);
         currentCoordinate[0] = currentCoordinate[0] + 1;
       }
-      this.checkConflictingShips(coordinateSet);
-      this.ships.push(ship);
-      coordinateSet.forEach((node) => {
-        node.ship = ship;
-      });
     }
+    return coordinateSet;
+  }
+
+  checkConflictingShips(coordinateSet) {
+    let isConflicting = false;
+    coordinateSet.forEach((node) => {
+      if (node.ship !== null) {
+        isConflicting = true;
+      }
+    });
+    if (isConflicting == true) {
+      console.error("A ship is already placed there!");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  placeShip(ship, start) {
+    let startingCoordinate = start;
+    // checks if ship can fit into selected grid
+    // try {
+    //   this.checkOutOfBounds(ship, startingCoordinate);
+    // } catch (error) {
+    //   console.error(
+    //     "This ship placement is out of bounds or a ship is already here!"
+    //   );
+    // }
+    if (this.checkOutOfBounds(ship, startingCoordinate) == true) {
+      return;
+    }
+    let coordinateSet = this.getShipGridList(ship, startingCoordinate);
+
+    if (this.checkConflictingShips(coordinateSet) == true) return;
+    this.ships.push(ship);
+    coordinateSet.forEach((node) => {
+      node.ship = ship;
+    });
+    return "ship has been placed";
   }
 
   recieveAttack(coordinate) {

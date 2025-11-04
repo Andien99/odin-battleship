@@ -2,11 +2,12 @@
 //horizontally it is coded in alphabetical order
 
 class ship {
-  constructor(length, hitcount, sunk, orientation = "horizontal") {
+  constructor(length, hitcount, sunk, orientation = "horizontal", color) {
     (this.length = length),
       (this.hitcount = hitcount),
       (this.sunk = sunk),
-      (this.orientation = orientation);
+      (this.orientation = orientation),
+      (this.color = color);
   }
 
   hit() {
@@ -23,4 +24,4 @@ class ship {
   }
 }
 
-module.exports = { ship };
+export { ship };

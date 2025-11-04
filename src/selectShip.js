@@ -4,9 +4,11 @@ import {
   updateOrientation,
   resetChildren,
   updateColor,
+  resetDraggedShip,
 } from "./customiseShipDisplay";
 import { gameboardUI } from "./displayGameboardUI";
 import { createElement } from "./createElement";
+import { ship } from "./createShip";
 
 class selectShip {
   constructor() {
@@ -15,6 +17,7 @@ class selectShip {
     this.orientation = "horizontal";
     this.selectedShips = [];
     this.initialise();
+    this.selectionGameboard = new gameboardUI("player", "selection-gameboard");
   }
 
   // prettier-ignore
@@ -66,7 +69,6 @@ class selectShip {
     sliderContainer.append(sliderInput)
     colorContainer.append(colorLabel, paletteContainer)
     paletteContainer.append(paletteRed,paletteGreen,paletteYellow,palettePurple,paletteBlue)
-    new gameboardUI('player', 'selection-gameboard')
     this.addEventListener()
     this.updateShipDisplay(this.length,this.color,this.orientation)
   }
@@ -93,7 +95,7 @@ class selectShip {
     const palettePurple = document.getElementById("purple");
     const paletteBlue = document.getElementById("blue");
     const randomiseBtn = document.getElementById("randomiseBtn");
-
+    const displayShip = document.getElementById("display-ship");
     function randomInt1to5() {
       let randomInt = Math.floor(Math.random() * 10);
       if (randomInt > 4) {
@@ -143,6 +145,91 @@ class selectShip {
         self.orientation = "vertical";
       }
       self.updateShipDisplay(this.length, this.color, this.orientation);
+    });
+
+    //coding for drag and drop
+    let cursor = {
+      x: null,
+      y: null,
+    };
+
+    let targetShip = {
+      dom: null,
+      x: null,
+      y: null,
+    };
+
+    displayShip.addEventListener("mousedown", (mouse) => {
+      if (
+        mouse.target.id == "display-ship" ||
+        mouse.target.classList.contains("ship-square")
+      ) {
+        resetDraggedShip();
+        let draggableShip = createElement("div", { id: "draggable-ship" });
+        updateDisplayLength(this.length, draggableShip);
+        updateOrientation(this.orientation, draggableShip, this.length);
+        updateColor(this.color, draggableShip);
+        document.body.appendChild(draggableShip);
+
+        cursor = {
+          x: mouse.clientX,
+          y: mouse.clientY,
+        };
+
+        targetShip = {
+          dom: draggableShip,
+          x:
+            mouse.target.getBoundingClientRect().left +
+            (mouse.clientX - mouse.target.getBoundingClientRect().left) -
+            30,
+          y:
+            mouse.target.getBoundingClientRect().top +
+            (mouse.clientY - mouse.target.getBoundingClientRect().top) -
+            30,
+        };
+        targetShip.dom.style.left = targetShip.x + "px";
+        targetShip.dom.style.top = targetShip.y + "px";
+      }
+    });
+
+    document.addEventListener("mousemove", (mouse) => {
+      if (targetShip.dom == null) return;
+      let currentCursor = {
+        x: mouse.clientX,
+        y: mouse.clientY,
+      };
+      let distance = {
+        x: currentCursor.x - cursor.x,
+        y: currentCursor.y - cursor.y,
+      };
+      targetShip.dom.style.left = targetShip.x + distance.x + "px";
+      targetShip.dom.style.top = targetShip.y + distance.y + "px";
+    });
+
+    document.addEventListener("mouseup", (mouse) => {
+      if (targetShip.dom == null) return;
+      let selectedCoordinate;
+      if (document.body.querySelector("#draggable-ship")) {
+        document.body.querySelector("#draggable-ship").remove();
+        selectedCoordinate = document.elementFromPoint(
+          mouse.clientX,
+          mouse.clientY
+        );
+      }
+      if (selectedCoordinate.classList.value == "coordinateBtn") {
+        let thisShip = new ship(
+          this.length,
+          0,
+          false,
+          this.orientation,
+          this.color
+        );
+        this.selectionGameboard.displayPlacedShip(
+          thisShip,
+          selectedCoordinate.id
+        );
+      }
+      targetShip.dom = null;
     });
   }
 }

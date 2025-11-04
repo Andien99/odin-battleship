@@ -7,7 +7,7 @@ class gameboardUI {
     this.idContainer = idContainer;
     this.isPlayable = isPlayable;
     this.render();
-    this.gameboard = new gameboard(playerType);
+    this.gameboardLogic = new gameboard(playerType);
   }
 
   render() {
@@ -80,14 +80,15 @@ class gameboardUI {
     const test = this.playerType;
     const gameboard = document.querySelector("#" + test);
     gameboard.addEventListener("click", (test) => {
-      console.log(test.target.id);
-      this.handleAttack(test.target.id, test.target);
+      if (test.target.id !== "player")
+        this.handleAttack(test.target.id, test.target);
     });
   }
 
   handleAttack(coordinate, gridBtn) {
+    if (this.isPlayable == false) return;
     let coordinateArr = [coordinate.charAt(0), coordinate.charAt(1)];
-    let attackResult = this.gameboard.recieveAttack(coordinateArr);
+    let attackResult = this.gameboardLogic.recieveAttack(coordinateArr);
     this.updateGameboard(attackResult, gridBtn);
   }
 
@@ -104,6 +105,25 @@ class gameboardUI {
       gridBtn.disabled = true;
       gridBtn.style.color = "initial";
       gridBtn.style.backgroundColor = "#ee9090ff";
+    }
+  }
+
+  displayPlacedShip(ship, coordinate) {
+    //currently, the game logic only takes coordinate parameters if it is and array
+    let coordinateAsArr = [
+      parseInt(coordinate.charAt(0)),
+      coordinate.charAt(1),
+    ];
+    if (this.gameboardLogic.placeShip(ship, coordinateAsArr)) {
+      let coordinateSet = this.gameboardLogic.getShipGridList(
+        ship,
+        coordinateAsArr
+      );
+      coordinateSet.forEach((element) => {
+        let coordinateID = element.coordinate.join("");
+        document.getElementById(coordinateID).style.backgroundColor =
+          ship.color;
+      });
     }
   }
 }

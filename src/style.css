@@ -157,10 +157,10 @@ button:hover {
   height: 70px;
   width: 70px;
   padding: 0px;
-  border-radius: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 2px solid black;
 }
 
 /* Scoreboard styling */
@@ -401,4 +401,14 @@ button:hover {
 
 #custom-ship {
   display: grid;
+}
+
+#draggable-ship {
+  display: grid;
+  position: absolute;
+}
+
+#draggable-ship > div {
+  height: 70px;
+  width: 70px;
 }
