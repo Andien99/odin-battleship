@@ -33,16 +33,16 @@ class gamemodeModal {
 
   addEventListener(parent, playerBtn, CPUBtn) {
     playerBtn.addEventListener("click", () => {
-      new selectShip();
+      new selectShip("player", "player1", "PvP");
       parent.classList.replace("open", "closed");
       playerBtn.disabled = true;
       CPUBtn.disabled = true;
     });
     CPUBtn.addEventListener("click", () => {
-      new player("player1");
-      new scoreboard();
-      new player("CPU");
+      new selectShip("player", "player1", "PvE");
       parent.classList.replace("open", "closed");
+      playerBtn.disabled = true;
+      CPUBtn.disabled = true;
     });
   }
 }

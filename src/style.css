@@ -103,6 +103,7 @@ header {
 #main-content {
   padding: 1em;
   font-size: 3rem;
+  color: white;
   background-color: #1d3557;
   display: grid;
   justify-items: center;
@@ -176,8 +177,9 @@ button:hover {
 }
 
 .scoreboard-title {
+  color: black;
   text-align: center;
-  font-size: 0.8em;
+  font-size: 0.5em;
   line-height: 1.2em;
   padding-top: 0.4em;
 }
@@ -198,8 +200,8 @@ button:hover {
 }
 
 .movement-log {
-  width: 6.2em;
-  height: 4em;
+  width: 10em;
+  height: 6em;
   background-color: white;
   border: 3px solid black;
   border-radius: 12px;

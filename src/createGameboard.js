@@ -33,10 +33,15 @@ class gameboard {
     }
   }
 
-  getLetterIndex(letterStr) {
+  getIndexfromLetter(letterStr) {
     //prettier-ignore
     let rowLocation = ["A","B","C","D","E","F","G","H","I","J"];
     return rowLocation.indexOf(letterStr);
+  }
+
+  getIndexofLetter(index) {
+    let rowLocation = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    return rowLocation[index];
   }
 
   getNextLetter(letterStr) {
@@ -47,13 +52,13 @@ class gameboard {
 
   find(coordinate) {
     let colIndex = coordinate[0] - 1;
-    return this.grid[colIndex][this.getLetterIndex(coordinate[1])];
+    return this.grid[colIndex][this.getIndexfromLetter(coordinate[1])];
   }
 
   checkOutOfBounds(ship, coordinate) {
     if (
       ship.orientation == "horizontal" &&
-      this.getLetterIndex(coordinate[1]) + ship.length - 1 >=
+      this.getIndexfromLetter(coordinate[1]) + ship.length - 1 >=
         this.grid[0].length
     ) {
       console.error("This ship placement is out of bounds");
@@ -91,6 +96,7 @@ class gameboard {
   checkConflictingShips(coordinateSet) {
     let isConflicting = false;
     coordinateSet.forEach((node) => {
+      if (node == undefined) console.log(coordinateSet);
       if (node.ship !== null) {
         isConflicting = true;
       }
@@ -123,6 +129,7 @@ class gameboard {
     coordinateSet.forEach((node) => {
       node.ship = ship;
     });
+    console.log("ship has been placed");
     return "ship has been placed";
   }
 
@@ -139,14 +146,18 @@ class gameboard {
       if (currentNode.ship.isSunk() == true) {
         self.sunkedShips += 1;
         if (self.checkWinner() == true) {
+          console.log("All ships have sunk! You win!");
           return "All ships have sunk! You win!";
         } else {
+          console.log("A ship has sunk!");
           return "A ship has sunk!";
         }
       }
+      console.log("A ship has been hit!");
       return "A ship has been hit!";
     } else {
       self.addMissedAttacks();
+      console.log("No ships were hit!");
       return "No ships were hit!";
     }
   }

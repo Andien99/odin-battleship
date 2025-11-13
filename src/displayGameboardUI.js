@@ -1,18 +1,78 @@
 import { createCoordinateBtn } from "./createGridButton";
 import { gameboard } from "./createGameboard";
+import { ship } from "./createShip";
+import { attackPlayer } from "./handleCPU";
 class gameboardUI {
   constructor(playerType, idContainer, isPlayable = false) {
     this.display = null;
     this.playerType = playerType;
     this.idContainer = idContainer;
     this.isPlayable = isPlayable;
-    this.render();
     this.gameboardLogic = new gameboard(playerType);
+    this.render();
+  }
+
+  getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  getRandomCoordinate() {
+    let randomY = this.getRandomNumber(1, 9);
+
+    let randomX = this.gameboardLogic.getIndexofLetter(
+      this.getRandomNumber(0, 9)
+    );
+    let newCoordinate = [randomY, randomX];
+    return newCoordinate;
+  }
+
+  getRandomColor() {
+    const colorSet = ["#ff006e", "#84a59d", "#8338ec", "#3a86ff", "#ffbe0b"];
+    return colorSet[this.getRandomNumber(0, 4)];
+  }
+
+  randomiseBoard() {
+    if (this.gameboardLogic.ships.length >= 4) {
+      return;
+    }
+    let randomLength = this.getRandomNumber(2, 5);
+    let randomOrientation;
+    let randomColor = this.getRandomColor();
+    if (this.getRandomNumber(0, 1) == 1) {
+      randomOrientation = "horizontal";
+    } else {
+      randomOrientation = "vertical";
+    }
+    let randomCoordinate = this.getRandomCoordinate();
+    let randomShip = new ship(
+      randomLength,
+      0,
+      false,
+      randomOrientation,
+      randomColor
+    );
+    let shipGridList;
+    if (
+      this.gameboardLogic.checkOutOfBounds(randomShip, randomCoordinate) ==
+      false
+    ) {
+      shipGridList = this.gameboardLogic.getShipGridList(
+        randomShip,
+        randomCoordinate
+      );
+    } else {
+      return this.randomiseBoard();
+    }
+    if (this.gameboardLogic.checkConflictingShips(shipGridList) == false) {
+      this.displayPlacedShip(randomShip, randomCoordinate);
+    }
+    return this.randomiseBoard();
   }
 
   render() {
     this.createContainer();
     this.addBtnEventListeners();
+    if (this.playerType == "CPU") this.randomiseBoard();
   }
 
   createContainer() {
@@ -70,7 +130,11 @@ class gameboardUI {
         currentRow += 1;
       }
       if (currentRow < 11) {
-        createCoordinateBtn(gameboard, currentRow + rowLocation[i]);
+        createCoordinateBtn(
+          gameboard,
+          currentRow + rowLocation[i],
+          this.playerType
+        );
       }
       i++;
     }
@@ -78,24 +142,37 @@ class gameboardUI {
 
   addBtnEventListeners() {
     const test = this.playerType;
-    const gameboard = document.querySelector("#" + test);
+    const gameboard = document.querySelector("#" + test + ".gameboard");
     gameboard.addEventListener("click", (test) => {
-      if (test.target.id !== "player")
+      if (gameboard.id == "CPU") {
         this.handleAttack(test.target.id, test.target);
+        attackPlayer();
+      }
     });
   }
 
   handleAttack(coordinate, gridBtn) {
-    if (this.isPlayable == false) return;
-    let coordinateArr = [coordinate.charAt(0), coordinate.charAt(1)];
-    let attackResult = this.gameboardLogic.recieveAttack(coordinateArr);
+    let coordinateAsArr;
+    if (typeof coordinate == "object") {
+      coordinateAsArr = coordinate;
+    } else if (coordinate.length > 13) {
+      coordinateAsArr = [
+        parseInt(
+          coordinate.slice(coordinate.length - 3, coordinate.length - 1)
+        ),
+        coordinate.charAt(coordinate.length - 1),
+      ];
+    } else {
+      coordinateAsArr = [
+        parseInt(coordinate.charAt(coordinate.length - 2)),
+        coordinate.charAt(coordinate.length - 1),
+      ];
+    }
+    let attackResult = this.gameboardLogic.recieveAttack(coordinateAsArr);
     this.updateGameboard(attackResult, gridBtn);
   }
 
   updateGameboard(result, gridBtn) {
-    if (this.isPlayable == false) {
-      return;
-    }
     if (result === "No ships were hit!") {
       gridBtn.textContent = "⚪";
       gridBtn.style.color = "initial";
@@ -110,10 +187,23 @@ class gameboardUI {
 
   displayPlacedShip(ship, coordinate) {
     //currently, the game logic only takes coordinate parameters if it is and array
-    let coordinateAsArr = [
-      parseInt(coordinate.charAt(0)),
-      coordinate.charAt(1),
-    ];
+    let coordinateAsArr;
+    if (typeof coordinate == "object") {
+      coordinateAsArr = coordinate;
+    } else if (coordinate.length > 13) {
+      coordinateAsArr = [
+        parseInt(
+          coordinate.slice(coordinate.length - 3, coordinate.length - 1)
+        ),
+        coordinate.charAt(coordinate.length - 1),
+      ];
+    } else {
+      coordinateAsArr = [
+        parseInt(coordinate.charAt(coordinate.length - 2)),
+        coordinate.charAt(coordinate.length - 1),
+      ];
+    }
+
     if (this.gameboardLogic.placeShip(ship, coordinateAsArr)) {
       let coordinateSet = this.gameboardLogic.getShipGridList(
         ship,
@@ -121,8 +211,9 @@ class gameboardUI {
       );
       coordinateSet.forEach((element) => {
         let coordinateID = element.coordinate.join("");
-        document.getElementById(coordinateID).style.backgroundColor =
-          ship.color;
+        document.querySelector(
+          "#coordinate-" + coordinateID + "." + this.playerType
+        ).style.backgroundColor = ship.color;
       });
     }
   }
