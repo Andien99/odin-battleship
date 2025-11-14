@@ -414,3 +414,34 @@ button:hover {
   height: 70px;
   width: 70px;
 }
+
+/* winnerScreen styles */
+
+#winner-screen {
+  height: 350px;
+  width: 700px;
+  background-color: #ffc300;
+  border: 6px solid #ffd60a;
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2em;
+}
+
+#winner-title {
+  font-size: 4em;
+  text-align: center;
+}
+
+.restart-btn {
+  font-size: 2em;
+  border: 4px solid black;
+  border-radius: 21px;
+  padding: 12px;
+}
+
+.restart-btn:hover {
+  background-color: #dfdddd;
+}

@@ -1,6 +1,7 @@
 import { player } from "./createPlayer";
 import { scoreboard } from "./createScoreboard";
 import { ship } from "./createShip";
+import { announceWinner } from "./gameWinnerScreen";
 import { gamemodeModal } from "./selectGamemode";
 import "./style.css";
 

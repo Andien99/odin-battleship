@@ -35,14 +35,10 @@ class gamemodeModal {
     playerBtn.addEventListener("click", () => {
       new selectShip("player", "player1", "PvP");
       parent.classList.replace("open", "closed");
-      playerBtn.disabled = true;
-      CPUBtn.disabled = true;
     });
     CPUBtn.addEventListener("click", () => {
       new selectShip("player", "player1", "PvE");
       parent.classList.replace("open", "closed");
-      playerBtn.disabled = true;
-      CPUBtn.disabled = true;
     });
   }
 }

@@ -1,6 +1,3 @@
-//board is a 10 by 10 grid
-//horizontally it is coded in alphabetical order
-
 class ship {
   constructor(length, hitcount, sunk, orientation = "horizontal", color) {
     (this.length = length),

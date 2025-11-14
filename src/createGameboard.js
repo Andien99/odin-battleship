@@ -1,10 +1,13 @@
+const { announceWinner } = require("./gameWinnerScreen");
+
 class gameboard {
-  constructor(playerType) {
+  constructor(playerName = "Player 1") {
     this.grid = [];
     this.missedAttacks = 0;
     this.ships = [];
     this.sunkedShips = null;
     this.createGameboard();
+    this.playerName = playerName;
   }
 
   createGameboard() {
@@ -94,6 +97,11 @@ class gameboard {
   }
 
   checkConflictingShips(coordinateSet) {
+    if (typeof coordinateSet == "string")
+      coordinateSet = [
+        coordinateSet.slice(0, coordinateSet.length - 1),
+        coordinateSet.charAt(coordinateSet.length - 1),
+      ];
     let isConflicting = false;
     coordinateSet.forEach((node) => {
       if (node == undefined) console.log(coordinateSet);
@@ -169,6 +177,8 @@ class gameboard {
 
   checkWinner() {
     if (this.ships.length == this.sunkedShips) {
+      new announceWinner(this.playerName);
+      document.getElementById("winner-screen").className = "modal open";
       return true;
     }
   }

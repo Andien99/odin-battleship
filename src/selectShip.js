@@ -109,6 +109,7 @@ class selectShip {
     const randomiseBoardBtn = document.getElementById("randomise-board-btn");
 
     startGameBtn.addEventListener("click", () => {
+      if (player1.gameboard.gameboardLogic.ships.length < 4) return;
       let playerGameboard = document.getElementById(this.playerName);
       let mainContainer = document.getElementById("main-content");
       let shipSelectionContainer = document.getElementById(
@@ -242,11 +243,7 @@ class selectShip {
     });
 
     document.addEventListener("mouseup", (mouse) => {
-      if (
-        targetShip.dom == null
-        // ||
-        // player1.gameboard.gameboardLogic.ships.length >= 4
-      ) {
+      if (targetShip.dom == null) {
         return;
       }
       let selectedCoordinate;
@@ -256,6 +253,9 @@ class selectShip {
           mouse.clientX,
           mouse.clientY
         );
+      }
+      if (player1.gameboard.gameboardLogic.ships.length == 4) {
+        console.error("max ship count is full!");
       }
       if (
         selectedCoordinate.classList.contains("coordinateBtn") &&
@@ -270,9 +270,7 @@ class selectShip {
         );
         player1.gameboard.displayPlacedShip(thisShip, selectedCoordinate.id);
       }
-      if ((player1.gameboard.gameboardLogic.ships.length = 4)) {
-        console.error("max ship count is full!");
-      }
+
       targetShip.dom = null;
     });
   }

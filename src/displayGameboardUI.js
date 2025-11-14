@@ -144,7 +144,10 @@ class gameboardUI {
     const test = this.playerType;
     const gameboard = document.querySelector("#" + test + ".gameboard");
     gameboard.addEventListener("click", (test) => {
-      if (gameboard.id == "CPU") {
+      if (
+        gameboard.id == "CPU" &&
+        test.target.classList.contains("coordinateBtn")
+      ) {
         this.handleAttack(test.target.id, test.target);
         attackPlayer();
       }
