@@ -3,12 +3,13 @@ import { gameboard } from "./createGameboard";
 import { ship } from "./createShip";
 import { attackPlayer } from "./handleCPU";
 class gameboardUI {
-  constructor(playerType, idContainer, isPlayable = false) {
+  constructor(playerType, idContainer, isPlayable = false, playerName) {
     this.display = null;
     this.playerType = playerType;
+    this.playerName = playerName;
     this.idContainer = idContainer;
     this.isPlayable = isPlayable;
-    this.gameboardLogic = new gameboard(playerType);
+    this.gameboardLogic = new gameboard(playerName);
     this.render();
   }
 
@@ -32,7 +33,7 @@ class gameboardUI {
   }
 
   randomiseBoard() {
-    if (this.gameboardLogic.ships.length >= 4) {
+    if (this.gameboardLogic.ships.length >= 5) {
       return;
     }
     let randomLength = this.getRandomNumber(2, 5);
@@ -145,11 +146,27 @@ class gameboardUI {
     const gameboard = document.querySelector("#" + test + ".gameboard");
     gameboard.addEventListener("click", (test) => {
       if (
-        gameboard.id == "CPU" &&
+        this.isPlayable == true &&
         test.target.classList.contains("coordinateBtn")
       ) {
         this.handleAttack(test.target.id, test.target);
-        attackPlayer();
+        if (document.querySelector(".turn-screen").style.left == 50 + "%") {
+          document.querySelector(".turn-screen").style.left = 0 + "%";
+        } else {
+          document.querySelector(".turn-screen").style.left = 50 + "%";
+        }
+
+        return;
+      }
+      if (
+        gameboard.id == "CPU" &&
+        test.target.classList.contains("coordinateBtn")
+      ) {
+        document.querySelector(".turn-screen").style.left = 50 + "%";
+        this.handleAttack(test.target.id, test.target);
+        setTimeout(() => {
+          attackPlayer();
+        }, 1000);
       }
     });
   }

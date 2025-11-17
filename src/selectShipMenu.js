@@ -10,21 +10,29 @@ import { createElement } from "./createElement";
 import { ship } from "./createShip";
 import { player } from "./createPlayer";
 import { scoreboard } from "./createScoreboard";
-
 let player1 = null;
 let player2 = null;
+let player1Scoreboard = null;
+let player2Scoreboard = null;
 
 class selectShip {
-  constructor(playerType, playerName, gameMode) {
+  constructor(
+    playerType,
+    playerName,
+    gameMode,
+    gameboardOwner = player1,
+    opponent
+  ) {
     this.playerType = playerType;
     this.playerName = playerName;
     this.gameMode = gameMode;
-    this.length = 3;
+    this.gameboardOwner = gameboardOwner;
+    this.opponent = opponent;
+    this.length = 4;
     this.color = "#ffbe0b";
     this.orientation = "horizontal";
     this.selectedShips = [];
     this.initialise();
-    player1 = new player(playerType, playerName);
   }
 
   // prettier-ignore
@@ -36,7 +44,8 @@ class selectShip {
     let shipSelection = createElement("div", { id: "ship-selection"});
     let displayContainer = createElement("div", { id: "display-container",});
     let displayShip = createElement("div", { id: "display-ship" });
-    let startGameBtn = createElement("button", {id: "start-game", textContent: "Start Game",});
+    let startGameBtn = createElement("button", {id: "start-game", textContent: "Start Game"});
+    let player2GameboardBtn = createElement("button", {id: "player2-customise-btn", textContent: "Player2"})
     let customiseShipContainer = createElement("div", {id: "customise-ship-container",});
     let orientationContainer = createElement("div", {id: "orientation-container",className: "property",});
     let orientationLabel = createElement("p", {textContent: "Orientation",});
@@ -45,12 +54,13 @@ class selectShip {
     let verticalBtn = createElement("button", {textContent: "Vertical",id:'vertical-btn'});
     let lengthContainer = createElement("div", {id: "length-container",className: "property",});
     let lengthLabel = createElement("p", { textContent: "Length" });
+    let rightSideLabel = createElement('h1', {textContent: this.playerName, id: 'right-side-label'}) 
     let sliderContainer = createElement("div", {className: "slider-container",});
     let sliderInput = createElement("input", {
       type: "range",
-      min: 1,
-      max: 5,
-      value: 3,
+      min: 2,
+      max: 6,
+      value: 4,
       id: "myRange",
       className: "slider",
     });
@@ -64,10 +74,15 @@ class selectShip {
     const paletteBlue = createElement('div', {className:'palette', id:'blue'})
     const randomiseShipBtn = createElement('button',{id:'randomise-ship-btn', textContent:'Random Ship'})
     const randmiseBoardBtn = createElement('button', {id:'randomise-board-btn', textContent:'Randomise Board'})
+    
 
     document.body.append(shipSelectionContainer)
     shipSelectionContainer.append(playerGameboard, rightSideInfo)
-    rightSideInfo.append(instructionLabel, shipSelection,startGameBtn)
+    if (this.gameMode == 'PvP' && this.playerName == 'Player1') {
+    rightSideInfo.append(rightSideLabel,  instructionLabel, shipSelection,player2GameboardBtn)  
+    } else {
+      rightSideInfo.append(rightSideLabel,  instructionLabel, shipSelection,startGameBtn)
+    }    
     shipSelection.append(displayContainer, customiseShipContainer)
     displayContainer.append(displayShip)
     customiseShipContainer.append(orientationContainer, lengthContainer, colorContainer,randomiseShipBtn)
@@ -80,6 +95,14 @@ class selectShip {
     paletteContainer.append(paletteRed,paletteGreen,paletteYellow,palettePurple,paletteBlue)
     this.addEventListener()
     this.updateShipDisplay(this.length,this.color,this.orientation)
+
+    if(this.playerName == 'Player1') {
+      player1 = new player(this.playerType, this.playerName, false , 'Player1')
+      this.gameboardOwner = player1}
+    if(this.playerName == 'Player2') {
+      player2 = new player("Player", this.playerName, true, "Player2");
+      this.gameboardOwner = player2 
+    }
   }
 
   updateShipDisplay(length, color, orientation) {
@@ -107,26 +130,53 @@ class selectShip {
     const displayShip = document.getElementById("display-ship");
     const startGameBtn = document.getElementById("start-game");
     const randomiseBoardBtn = document.getElementById("randomise-board-btn");
+    const player2GameboardBtn = document.getElementById(
+      "player2-customise-btn"
+    );
 
-    startGameBtn.addEventListener("click", () => {
-      if (player1.gameboard.gameboardLogic.ships.length < 4) return;
-      let playerGameboard = document.getElementById(this.playerName);
-      let mainContainer = document.getElementById("main-content");
-      let shipSelectionContainer = document.getElementById(
-        "ship-selection-container"
-      );
+    if (document.getElementById("start-game") !== null) {
+      startGameBtn.addEventListener("click", () => {
+        if (this.gameboardOwner.gameboard.gameboardLogic.ships.length < 5)
+          return;
+        let mainContainer = document.getElementById("main-content");
 
-      shipSelectionContainer.remove();
-      mainContainer.appendChild(playerGameboard);
-      if (document.getElementById("middle-container") == null) {
-        new scoreboard();
-      }
-      if (this.gameMode == "PvE") {
-        const CPUgameboard = createElement("div", { id: "CPU" });
-        mainContainer.appendChild(CPUgameboard);
-        player2 = new player("CPU", "CPU", true);
-      }
-    });
+        if (this.gameMode == "PvE") {
+          let player1Gameboard = document.getElementById("Player1");
+          player1Scoreboard = new scoreboard("Player", mainContainer);
+          player2Scoreboard = new scoreboard("CPU", mainContainer);
+          const CPUgameboard = createElement("div", { id: "CPU" });
+          mainContainer.append(player1Gameboard, CPUgameboard);
+          player2 = new player("CPU", "CPU", true, "CPU");
+        }
+
+        if (this.gameMode == "PvP") {
+          player1.gameboard.isPlayable = true;
+          player2.gameboard.isPlayable = true;
+          player1Scoreboard = new scoreboard("Player1", mainContainer);
+          player2Scoreboard = new scoreboard("Player2", mainContainer);
+          let player2Gameboard = document.getElementById("Player2");
+          mainContainer.append(this.opponent, player2Gameboard);
+        }
+        document.querySelector(".turn-screen").style.height = 86 + "%";
+        document.querySelector(".turn-screen").style.left = 0 + "%";
+        let shipSelectionContainer = document.getElementById(
+          "ship-selection-container"
+        );
+
+        shipSelectionContainer.remove();
+      });
+    }
+
+    if (document.getElementById("player2-customise-btn") !== null) {
+      player2GameboardBtn.addEventListener("click", () => {
+        if (this.gameboardOwner.gameboard.gameboardLogic.ships.length < 5)
+          return;
+        let player1Gameboard = document.getElementById("Player1");
+        document.getElementById("ship-selection-container").remove();
+        createElement("div", { id: "Player2" });
+        new selectShip("Player", "Player2", "PvP", player2, player1Gameboard);
+      });
+    }
 
     function randomInt1to5() {
       let randomInt = Math.floor(Math.random() * 10);
@@ -180,7 +230,7 @@ class selectShip {
     });
     randomiseBoardBtn.addEventListener("click", () => {
       this.resetBoard();
-      player1.gameboard.randomiseBoard();
+      this.gameboardOwner.gameboard.randomiseBoard();
     });
 
     //coding for drag and drop
@@ -254,12 +304,18 @@ class selectShip {
           mouse.clientY
         );
       }
-      if (player1.gameboard.gameboardLogic.ships.length == 4) {
+      if (this.gameboardOwner.gameboard.gameboardLogic.ships.length == 5) {
         console.error("max ship count is full!");
+        if (document.querySelector(".error") !== null) return;
+        let maxShipError = createElement("p", {
+          className: "error",
+          textContent: "max ship count has been met!",
+        });
+        document.getElementById("right-side").appendChild(maxShipError);
       }
       if (
         selectedCoordinate.classList.contains("coordinateBtn") &&
-        player1.gameboard.gameboardLogic.ships.length < 4
+        this.gameboardOwner.gameboard.gameboardLogic.ships.length < 5
       ) {
         let thisShip = new ship(
           this.length,
@@ -268,17 +324,22 @@ class selectShip {
           this.orientation,
           this.color
         );
-        player1.gameboard.displayPlacedShip(thisShip, selectedCoordinate.id);
+        this.gameboardOwner.gameboard.displayPlacedShip(
+          thisShip,
+          selectedCoordinate.id
+        );
       }
 
       targetShip.dom = null;
     });
   }
 
+  renderScore;
+
   resetBoard() {
-    player1.gameboard.gameboardLogic.ships = [];
-    console.log(player1.gameboard.gameboardLogic.ships);
-    let gridInfo = player1.gameboard.gameboardLogic.grid;
+    this.gameboardOwner.gameboard.gameboardLogic.ships = [];
+    console.log(this.gameboardOwner.gameboard.gameboardLogic.ships);
+    let gridInfo = this.gameboardOwner.gameboard.gameboardLogic.grid;
     gridInfo.forEach((node) => {
       for (let i = 0; i < node.length; i++) {
         node[i].ship = null;
@@ -292,4 +353,4 @@ class selectShip {
   }
 }
 
-export { selectShip, player1, player2 };
+export { selectShip, player1, player2, player1Scoreboard, player2Scoreboard };

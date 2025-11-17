@@ -1,6 +1,4 @@
-import { player } from "./createPlayer";
-import { scoreboard } from "./createScoreboard";
-import { selectShip } from "./selectShip";
+import { player1, selectShip } from "./selectShipMenu";
 
 export { gamemodeModal };
 
@@ -33,11 +31,11 @@ class gamemodeModal {
 
   addEventListener(parent, playerBtn, CPUBtn) {
     playerBtn.addEventListener("click", () => {
-      new selectShip("player", "player1", "PvP");
+      new selectShip("Player", "Player1", "PvP");
       parent.classList.replace("open", "closed");
     });
     CPUBtn.addEventListener("click", () => {
-      new selectShip("player", "player1", "PvE");
+      new selectShip("Player", "Player1", "PvE");
       parent.classList.replace("open", "closed");
     });
   }

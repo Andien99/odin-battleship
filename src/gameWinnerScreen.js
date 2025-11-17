@@ -1,5 +1,5 @@
 import { createElement } from "./createElement";
-import { player1, player2 } from "./selectShip";
+import { player1, player2 } from "./selectShipMenu";
 
 class announceWinner {
   constructor(gameboardOwner) {
@@ -13,16 +13,11 @@ class announceWinner {
   }
 
   renderScreen() {
-    let winner;
-    if (this.gameboardOwner == "CPU") {
-      winner = "Player";
-    } else {
-      winner = "CPU";
-    }
+    document.querySelector(".turn-screen").style.height = 0 + "%";
     const mainContainer = document.getElementById("winner-screen");
     const winnerTitle = createElement("p", {
       id: "winner-title",
-      textContent: winner + " wins!",
+      textContent: this.gameboardOwner + " loses!",
     });
     const restartBtn = createElement("button", {
       className: "restart-btn",
@@ -43,6 +38,9 @@ class announceWinner {
       while (winnerScreen.firstElementChild) {
         winnerScreen.firstElementChild.remove();
       }
+      document
+        .getElementById("main-content")
+        .appendChild(createElement("div", { className: "turn-screen" }));
       winnerScreen.classList.replace("open", "closed");
       selectGamemode.classList.replace("closed", "open");
     });

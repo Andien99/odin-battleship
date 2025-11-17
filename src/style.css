@@ -108,7 +108,8 @@ header {
   display: grid;
   justify-items: center;
   align-items: center;
-  grid-template-columns: 5fr 3fr 5fr;
+  grid-template-columns: 5fr 5fr;
+  grid-template-rows: 200px 1fr;
 }
 
 .gameboard {
@@ -155,9 +156,9 @@ button:hover {
 }
 .coordinateBtn {
   background-color: white;
-  height: 70px;
-  width: 70px;
-  padding: 0px;
+  height: 80px;
+  width: 80px;
+  padding-bottom: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,46 +166,11 @@ button:hover {
 }
 
 /* Scoreboard styling */
-.scoreboard-content {
-  background-color: white;
-  height: 13em;
-  width: 3em;
-  border-radius: 15px;
-  border: solid black 3px;
+.scoreboard-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-}
-
-.scoreboard-title {
-  color: black;
-  text-align: center;
-  font-size: 0.5em;
-  line-height: 1.2em;
-  padding-top: 0.4em;
-}
-
-.ship-container {
-  border: solid 2px black;
-  width: 2em;
-  height: 2em;
-  border-radius: 8px;
-  margin: 0.3em;
-}
-
-#middle-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.movement-log {
-  width: 10em;
-  height: 6em;
-  background-color: white;
-  border: 3px solid black;
-  border-radius: 12px;
 }
 
 /* Modal stylings */
@@ -386,6 +352,15 @@ button:hover {
   background-color: #ffbe0b;
 }
 
+.error {
+  color: red;
+  font-size: larger;
+}
+
+#right-side-label {
+  text-decoration: underline;
+}
+
 /* Stylings for the custom ship screen */
 
 #display-ship {
@@ -444,4 +419,12 @@ button:hover {
 
 .restart-btn:hover {
   background-color: #dfdddd;
+}
+
+.turn-screen {
+  position: fixed;
+  background: #313131a3;
+  height: 0%;
+  width: 50%;
+  left: 0%;
 }

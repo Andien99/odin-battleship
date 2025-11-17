@@ -1,7 +1,8 @@
+const { scoreboard } = require("./createScoreboard");
 const { announceWinner } = require("./gameWinnerScreen");
 
 class gameboard {
-  constructor(playerName = "Player 1") {
+  constructor(playerName = "Player1") {
     this.grid = [];
     this.missedAttacks = 0;
     this.ships = [];
@@ -61,16 +62,17 @@ class gameboard {
   checkOutOfBounds(ship, coordinate) {
     if (
       ship.orientation == "horizontal" &&
-      this.getIndexfromLetter(coordinate[1]) + ship.length - 1 >=
-        this.grid[0].length
+      this.getIndexfromLetter(coordinate[1]) + ship.length > 10
     ) {
-      console.error("This ship placement is out of bounds");
+      if (this.playerName !== "CPU")
+        console.error("This ship placement is out of bounds");
       return true;
     } else if (
       ship.orientation == "vertical" &&
       this.grid[coordinate[0] + ship.length - 1] == undefined
     ) {
-      console.error("This ship placement is out of bounds");
+      if (this.playerName !== "CPU")
+        console.error("This ship placement is out of bounds");
       return true;
     } else {
       return false;
@@ -110,7 +112,8 @@ class gameboard {
       }
     });
     if (isConflicting == true) {
-      console.error("A ship is already placed there!");
+      if (this.playerName !== "CPU")
+        console.error("A ship is already placed there!");
       return true;
     } else {
       return false;
@@ -119,14 +122,6 @@ class gameboard {
 
   placeShip(ship, start) {
     let startingCoordinate = start;
-    // checks if ship can fit into selected grid
-    // try {
-    //   this.checkOutOfBounds(ship, startingCoordinate);
-    // } catch (error) {
-    //   console.error(
-    //     "This ship placement is out of bounds or a ship is already here!"
-    //   );
-    // }
     if (this.checkOutOfBounds(ship, startingCoordinate) == true) {
       return;
     }
@@ -137,7 +132,7 @@ class gameboard {
     coordinateSet.forEach((node) => {
       node.ship = ship;
     });
-    console.log("ship has been placed");
+    if (this.playerName !== "CPU") console.log("ship has been placed");
     return "ship has been placed";
   }
 
@@ -145,23 +140,32 @@ class gameboard {
     const currentNode = this.find(coordinate);
     let self = this;
     if (currentNode.hit == true) {
-      throw new Error("This coordinate has already been selected");
+      console.error("This coordinate has already been selected");
+      return;
     } else {
       currentNode.hit = true;
     }
     if (currentNode.ship !== null) {
       currentNode.ship.hitcount += 1;
       if (currentNode.ship.isSunk() == true) {
+        let playerScoreboard = document.querySelector(
+          ".scoreboard-" + this.playerName
+        );
+        playerScoreboard.textContent = playerScoreboard.textContent.replace(
+          "🚢",
+          "❌"
+        );
         self.sunkedShips += 1;
         if (self.checkWinner() == true) {
-          console.log("All ships have sunk! You win!");
+          if (this.playerName !== "CPU")
+            console.log("All ships have sunk! You win!");
           return "All ships have sunk! You win!";
         } else {
-          console.log("A ship has sunk!");
-          return "A ship has sunk!";
+          if (this.playerName !== "CPU") console.log("A ship has sunk!");
+          return;
         }
       }
-      console.log("A ship has been hit!");
+      if (this.playerName !== "CPU") console.log("A ship has been hit!");
       return "A ship has been hit!";
     } else {
       self.addMissedAttacks();

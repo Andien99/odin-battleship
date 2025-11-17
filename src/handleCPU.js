@@ -1,4 +1,4 @@
-import { player1 } from "./selectShip";
+import { player1 } from "./selectShipMenu";
 
 let availableMovesCPU = [];
 let rowLocation = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -12,7 +12,7 @@ function attackPlayer() {
   let randomAttackLocation =
     availableMovesCPU[getRandomNumber(0, availableMovesCPU.length - 1)];
   let coordinateBtn = document.querySelector(
-    "#coordinate-" + randomAttackLocation + ".player"
+    "#coordinate-" + randomAttackLocation + ".Player"
   );
   availableMovesCPU.splice(availableMovesCPU.indexOf(randomAttackLocation), 1);
   randomAttackLocation = [
@@ -20,6 +20,7 @@ function attackPlayer() {
     randomAttackLocation.charAt(randomAttackLocation.length - 1),
   ];
   player1.gameboard.handleAttack(randomAttackLocation, coordinateBtn);
+  document.querySelector(".turn-screen").style.left = 0 + "%";
 }
 
 function getRandomNumber(min, max) {
