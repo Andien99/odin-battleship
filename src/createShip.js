@@ -1,10 +1,18 @@
 class ship {
-  constructor(length, hitcount, sunk, orientation = "horizontal", color) {
+  constructor(
+    length,
+    hitcount,
+    sunk,
+    orientation = "horizontal",
+    color,
+    coordinate
+  ) {
     (this.length = length),
       (this.hitcount = hitcount),
       (this.sunk = sunk),
       (this.orientation = orientation),
       (this.color = color);
+    this.coordinate = coordinate;
   }
 
   hit() {

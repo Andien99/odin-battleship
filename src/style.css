@@ -423,8 +423,25 @@ button:hover {
 
 .turn-screen {
   position: fixed;
-  background: #313131a3;
+  background: #133555;
+  opacity: 0.7;
   height: 0%;
   width: 50%;
   left: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#hide-screen {
+  position: fixed;
+  background: #133555;
+  height: 83%;
+  width: 100%;
+  left: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

@@ -157,12 +157,16 @@ class selectShip {
           let player2Gameboard = document.getElementById("Player2");
           mainContainer.append(this.opponent, player2Gameboard);
         }
+        document.querySelector(".turn-screen").style.opacity = 0.6;
         document.querySelector(".turn-screen").style.height = 86 + "%";
         document.querySelector(".turn-screen").style.left = 0 + "%";
         let shipSelectionContainer = document.getElementById(
           "ship-selection-container"
         );
-
+        player1.gameboard.storePlacedShips();
+        player2.gameboard.storePlacedShips();
+        player2.gameboard.hideShips();
+        player1.gameboard.hideShips();
         shipSelectionContainer.remove();
       });
     }

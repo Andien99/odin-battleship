@@ -1,8 +1,8 @@
 import { createElement } from "./createElement";
 
-function createCoordinateBtn(parent, coordinate, playerType = "") {
+function createCoordinateBtn(parent, coordinate, playerName = "") {
   let coordinateBtn = createElement("button", {
-    className: "coordinateBtn " + playerType,
+    className: "coordinateBtn " + playerName,
     id: "coordinate-" + coordinate,
   });
 

@@ -2,6 +2,8 @@ import { createCoordinateBtn } from "./createGridButton";
 import { gameboard } from "./createGameboard";
 import { ship } from "./createShip";
 import { attackPlayer } from "./handleCPU";
+import { player2, player1 } from "./selectShipMenu";
+import { createElement } from "./createElement";
 class gameboardUI {
   constructor(playerType, idContainer, isPlayable = false, playerName) {
     this.display = null;
@@ -10,6 +12,7 @@ class gameboardUI {
     this.idContainer = idContainer;
     this.isPlayable = isPlayable;
     this.gameboardLogic = new gameboard(playerName);
+    this.placedShips = [];
     this.render();
   }
 
@@ -50,7 +53,8 @@ class gameboardUI {
       0,
       false,
       randomOrientation,
-      randomColor
+      randomColor,
+      randomCoordinate
     );
     let shipGridList;
     if (
@@ -134,7 +138,7 @@ class gameboardUI {
         createCoordinateBtn(
           gameboard,
           currentRow + rowLocation[i],
-          this.playerType
+          this.playerName
         );
       }
       i++;
@@ -190,6 +194,10 @@ class gameboardUI {
     }
     let attackResult = this.gameboardLogic.recieveAttack(coordinateAsArr);
     this.updateGameboard(attackResult, gridBtn);
+    // this.revealShips();
+    // if (this.playerName == "Player1") player2.gameboard.hideShips();
+    // if (this.playerName == "Player2") player1.gameboard.hideShips();
+    // this.countdownNextTurn();
   }
 
   updateGameboard(result, gridBtn) {
@@ -232,10 +240,54 @@ class gameboardUI {
       coordinateSet.forEach((element) => {
         let coordinateID = element.coordinate.join("");
         document.querySelector(
-          "#coordinate-" + coordinateID + "." + this.playerType
+          "#coordinate-" + coordinateID + "." + this.playerName
         ).style.backgroundColor = ship.color;
       });
     }
+  }
+
+  storePlacedShips() {
+    this.gameboardLogic.ships.forEach((element) => {
+      let shipCoordinateList = [];
+      shipCoordinateList = this.gameboardLogic.getShipGridList(
+        element,
+        element.coordinate
+      );
+      this.placedShips.push(shipCoordinateList);
+    });
+    console.log(this.placedShips);
+  }
+
+  hideShips() {
+    for (let i = 0; i < 5; i++) {
+      this.placedShips[i].forEach((element) => {
+        let gridBtn = document.querySelector(
+          "#coordinate-" + element.coordinate.join("") + "." + this.playerName
+        );
+        if (gridBtn.style.backgroundColor !== "rgb(238, 144, 144)")
+          gridBtn.style.backgroundColor = "white";
+      });
+    }
+  }
+
+  revealShips() {
+    for (let i = 0; i < 5; i++) {
+      this.placedShips[i].forEach((element) => {
+        let gridBtn = document.querySelector(
+          "#coordinate-" + element.coordinate.join("") + "." + this.playerName
+        );
+        if (gridBtn.style.backgroundColor !== "rgb(238, 144, 144)")
+          gridBtn.style.backgroundColor = element.ship.color;
+      });
+    }
+  }
+
+  countdownNextTurn() {
+    let hideScreenDiv = createElement("div", { id: "hide-screen" });
+    document.getElementById("main-content").appendChild(hideScreenDiv);
+    setTimeout(() => {
+      hideScreenDiv.remove();
+    }, 2000);
   }
 }
 
